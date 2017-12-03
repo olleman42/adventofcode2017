@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"math"
 	"os"
 	"strconv"
 	"strings"
@@ -41,8 +42,8 @@ func main() {
 		for _, c := range ints {
 
 			for _, c2 := range ints {
-				if c-c2 > bg {
-					bg = c - c2
+				if math.Mod(float64(c), float64(c2)) == 0 && c != c2 {
+					bg = c / c2
 				}
 			}
 		}
