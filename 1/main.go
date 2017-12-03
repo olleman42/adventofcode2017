@@ -12,21 +12,14 @@ func main() {
 		log.Fatal("Need to specify input")
 	}
 	input := os.Args[1]
+	dubdub := input + input
+	xlen := int(len(input) / 2)
 
 	valid := []int{}
 
 	for i, l := range input {
-		if i < len(input)-1 {
-			if string(l) == string(input[i+1]) {
-				p, err := strconv.Atoi(string(l))
-				if err != nil {
-					log.Fatal(err)
-				}
-				valid = append(valid, p)
-			}
-			continue
-		}
-		if string(l) == string(input[0]) {
+
+		if string(l) == string(dubdub[i+xlen]) {
 			p, err := strconv.Atoi(string(l))
 			if err != nil {
 				log.Fatal(err)
