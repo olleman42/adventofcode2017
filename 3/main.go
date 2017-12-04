@@ -1,8 +1,10 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"math"
+	"strconv"
 )
 
 func main() {
@@ -10,13 +12,16 @@ func main() {
 	// 1, 2, 1, 2, 1, 2, 1, 2, 3, 2, 3, 4, 3, 2, 3, 4, 3, 2, 3, 4, 3, 2, 3, 4, 5
 	// 2 -> 2, 3 -> 2, 4->4, 5->4, 6->6, 7->6
 	// generate matrix
-	genMatrix(277678)
+	genMatrix(100)
 
 }
 
 // count h-steps and v-steps
 
 func genMatrix(size int) {
+	storage := make(map[string]int)
+	storage["0,0"] = 1
+
 	v, h := 0, 0
 
 	dir := 0
@@ -54,10 +59,48 @@ func genMatrix(size int) {
 
 		v, h = dirs[dir](v, h)
 
+		// get neighbours
+		// x x x
+		// x y x
+		// x x x
+		partsum := 0
+		if val, ok := storage[strconv.Itoa(v+1)+","+strconv.Itoa(h+1)]; ok {
+			partsum = partsum + val
+		}
+		if val, ok := storage[strconv.Itoa(v)+","+strconv.Itoa(h+1)]; ok {
+			partsum = partsum + val
+		}
+		if val, ok := storage[strconv.Itoa(v+1)+","+strconv.Itoa(h)]; ok {
+			partsum = partsum + val
+		}
+		if val, ok := storage[strconv.Itoa(v-1)+","+strconv.Itoa(h+1)]; ok {
+			partsum = partsum + val
+		}
+		if val, ok := storage[strconv.Itoa(v+1)+","+strconv.Itoa(h-1)]; ok {
+			partsum = partsum + val
+		}
+		if val, ok := storage[strconv.Itoa(v)+","+strconv.Itoa(h-1)]; ok {
+			partsum = partsum + val
+		}
+		if val, ok := storage[strconv.Itoa(v-1)+","+strconv.Itoa(h)]; ok {
+			partsum = partsum + val
+		}
+		if val, ok := storage[strconv.Itoa(v-1)+","+strconv.Itoa(h-1)]; ok {
+			partsum = partsum + val
+		}
+		storage[strconv.Itoa(v)+","+strconv.Itoa(h)] = partsum
+		fmt.Println(partsum)
+
 		counter++
+
+		if partsum > 277678 {
+			fmt.Println(partsum)
+			break
+		}
 
 	}
 	log.Println(v, h)
 	distance := math.Abs(float64(v)) + math.Abs(float64(h))
 	log.Println(distance)
+	log.Println(storage)
 }
