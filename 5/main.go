@@ -38,9 +38,13 @@ func main() {
 	for {
 		if instrLoc < len(instr) {
 			instrValue := instr[instrLoc]
-			instr[instrLoc] = instrValue + 1
+			if instrValue >= 3 {
+				instr[instrLoc] = instrValue - 1
+			} else {
+				instr[instrLoc] = instrValue + 1
+			}
+
 			instrLoc = instrLoc + instrValue
-			fmt.Println(instrLoc)
 			stepCount++
 			continue
 		}
