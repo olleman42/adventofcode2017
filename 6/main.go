@@ -37,6 +37,7 @@ func main() {
 	// then do pass to smear out contents
 	seenCache := []string{}
 	count := 0
+	seenAt := 0
 	done := false
 	for {
 		count++
@@ -68,10 +69,12 @@ func main() {
 		}
 		cached := strings.Join(t, "-")
 
-		for _, v := range seenCache {
+		for i, v := range seenCache {
 			if v == cached {
 				// done, break
 				done = true
+				fmt.Println(i)
+				seenAt = i
 			}
 		}
 
@@ -83,6 +86,6 @@ func main() {
 
 	}
 
-	fmt.Println(count)
+	fmt.Println(count - seenAt - 1)
 
 }
