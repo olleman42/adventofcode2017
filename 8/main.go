@@ -25,6 +25,7 @@ func main() {
 	instructions := strings.Split(string(c), "\r\n")
 
 	membank := map[string]int{}
+	maxValue := 0
 
 	for _, instr := range instructions {
 		fmt.Println(instr)
@@ -52,11 +53,15 @@ func main() {
 				membank[memposition] = storedValue - instrValue
 
 			}
+			if membank[memposition] > maxValue {
+				maxValue = membank[memposition]
+			}
 		}
 
 	}
 
 	fmt.Println(membank)
+	fmt.Println(maxValue)
 
 }
 
