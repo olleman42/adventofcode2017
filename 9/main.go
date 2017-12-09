@@ -24,6 +24,7 @@ func main() {
 	totalScore := 0
 	skipNextStep := false
 	currentlyInGarbage := false
+	garbageStep := 0
 	for _, step := range string(c) {
 		if skipNextStep {
 			skipNextStep = false
@@ -51,10 +52,13 @@ func main() {
 		if currentlyInGarbage {
 			if step == '>' {
 				currentlyInGarbage = false
+				continue
 			}
+			garbageStep++
 		}
 
 	}
 
 	fmt.Println(totalScore)
+	fmt.Println(garbageStep)
 }
