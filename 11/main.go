@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"math"
 	"os"
 	"strings"
 )
@@ -57,26 +58,10 @@ func findMinimalSteps(steps []string) int {
 }
 
 func getDistance(x, y int) int {
-	total := 0
-	if x > 0 && y > 0 {
-		total = x + y
-	}
-	if x < 0 && y < 0 {
-		total = -1 * (x + y)
-	}
-	if x < 0 && y > 0 {
-		total = -x + y
-	}
-	if x > 0 && y < 0 {
-		total = x
-	}
+	// convert to cube
+	z := -x - y
 
-	if y == 0 {
-		total = x
-	}
-	if x == 0 {
-		total = y
-	}
+	distance := (math.Abs(float64(x)) + math.Abs(float64(y)) + math.Abs(float64(z))) / 2
 
-	return total
+	return int(distance)
 }
