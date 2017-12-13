@@ -50,15 +50,9 @@ func main() {
 		flat = append(flat, 0)
 	}
 
-	fmt.Println(flat)
-	fmt.Println(getSchwifty(flat, 0))
-	fmt.Println(getSchwifty(flat, 10))
-
 	attempt := 0
 	for {
-		if attempt%10000 == 0 {
-			fmt.Println(attempt)
-		}
+
 		if getSchwifty(flat, attempt) {
 			fmt.Println(attempt)
 			os.Exit(0)
@@ -69,19 +63,10 @@ func main() {
 }
 
 func getSchwifty(x []int, offset int) bool {
-	// penalty := 0
-	// stopper := len(x)
 	for i := 0; i < len(x); i++ {
-		// fmt.Println(i, offset, x[i])
-
 		if x[i] != 0 && (i+offset)%((2*x[i])-2) == 0 {
-			// fmt.Println(i+offset, i, (2*x[i] - 2))
 			return false
-			// penalty = penalty + i*x[i]
 		}
-
 	}
 	return true
-	// fmt.Println(penalty)
-
 }
