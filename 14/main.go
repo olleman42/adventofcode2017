@@ -6,14 +6,6 @@ import (
 	"strconv"
 )
 
-type gcs struct {
-	s []string
-}
-
-func (gcs *gcs) Append(in string) {
-	gcs.s = append(gcs.s, in)
-}
-
 func main() {
 	grid := getGrid()
 
@@ -33,71 +25,49 @@ func main() {
 
 	// fmt.Println(cn)
 
-	// groupCells := []*string{}
-	gc := &gcs{}
+	groupCells := &[]*string{}
 	groupCount := 0
 	// walk through all cells and try to climb around
 	for curRow, r := range grid {
 		for curCol, c := range r {
 			// create climber that tries to crawl through members
 			ident := strconv.Itoa(curRow) + "-" + strconv.Itoa(curCol)
-			if c && !alreadyNoted(&ident, gc) {
+			if c && !alreadyNoted(&ident, groupCells) {
 				// new group
 				groupCount++
-				fmt.Println("Crawling group"+strconv.Itoa(groupCount), len(gc.s))
-				crawl(curRow, curCol, 0, "", grid, gc)
+				fmt.Println("Crawling group " + strconv.Itoa(groupCount))
+				crawl(curRow, curCol, "", grid, groupCells)
 			}
-			//no new group, keep going
 
-			// // if val, check neighbours to see if a new region is to be started - check if neighbours are in group cells already
-			// if c {
-			// 	// check for neighbors above below, left, right
-			// 	// ABOVE
-			// 	topHit := curRow != 0 && grid[curRow-1][curCol]
-			// 	// LEFT
-			// 	leftHit := curCol != 0 && grid[curRow][curCol-1]
-
-			// 	//RIGHT
-			// 	rightHit := curCol != 127 && grid[curRow][curCol+1]
-			// 	// there is a dude to the right of me is part of my group
-			// 	// if neight me or my neighbour are accounted for (and top and right didn't hit), we might be new
-
-			// 	//BOTTOM
-			// 	bottomHit := curRow != 127 && grid[curRow+1][curCol]
-
-			// 	// if top and left didn't hit, we might be new
 		}
 	}
 	fmt.Println("done")
 
 }
 
-func crawl(x, y, d int, ignoreDir string, grid [][]bool, groupCells *gcs) {
-	// fmt.Println(len(groupCells))
+func crawl(x, y int, ignoreDir string, grid [][]bool, groupCells *[]*string) {
 	ident := strconv.Itoa(x) + "-" + strconv.Itoa(y)
 	if alreadyNoted(&ident, groupCells) {
 		return
 	}
-	groupCells.Append(ident)
-	// groupCells = append(groupCells, &ident)
-	// check my neighbours
+	*groupCells = append(*groupCells, &ident)
 	if x != 0 && grid[x-1][y] && ignoreDir != "u" {
-		crawl(x-1, y, d+1, "d", grid, groupCells)
+		crawl(x-1, y, "d", grid, groupCells)
 	}
 	if x != 127 && grid[x+1][y] && ignoreDir != "d" {
-		crawl(x+1, y, d+1, "u", grid, groupCells)
+		crawl(x+1, y, "u", grid, groupCells)
 	}
 	if y != 0 && grid[x][y-1] && ignoreDir != "r" {
-		crawl(x, y-1, d+1, "l", grid, groupCells)
+		crawl(x, y-1, "l", grid, groupCells)
 	}
 	if y != 127 && grid[x][y+1] && ignoreDir != "l" {
-		crawl(x, y+1, d+1, "r", grid, groupCells)
+		crawl(x, y+1, "r", grid, groupCells)
 	}
 }
 
-func alreadyNoted(in *string, list *gcs) bool {
-	for _, v := range list.s {
-		if v == *in {
+func alreadyNoted(in *string, list *[]*string) bool {
+	for _, v := range *list {
+		if *v == *in {
 			return true
 		}
 	}
