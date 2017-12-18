@@ -49,12 +49,12 @@ func main() {
 
 	}
 
-	for _, i := range itrs {
-		fmt.Println(i)
+	// for _, i := range itrs {
+	// 	fmt.Println(i)
 
-	}
+	// }
 
-	in0, in1, count := make(chan int, 20), make(chan int, 20), make(chan int)
+	in0, in1, count := make(chan int, 300), make(chan int, 300), make(chan int)
 	wait := make(chan bool)
 
 	go runProgram(0, in0, in1, count, itrs)
@@ -69,7 +69,10 @@ func main() {
 			} else {
 				tally1++
 			}
-			// fmt.Println(tally0, tally1)
+			if len(in1) == 0 && len(in0) == 0 {
+				fmt.Println("done")
+			}
+			fmt.Println(tally0, tally1)
 			// fmt.Println(len(in0), len(in1))
 		}
 	}(count, tally0, tally1)
@@ -142,6 +145,17 @@ func runProgram(id int, in, out, count chan int, itrs []instruction) {
 			// }
 		},
 		"jgz": func(a, b interface{}) {
+			// fmt.Println("jgzz")
+			// fmt.Println(a)
+			if a == "1" {
+				// fmt.Print("gotem")
+				// fmt.Println(currentInstruction)
+
+				currentInstruction = currentInstruction - 1
+				currentInstruction = currentInstruction + b.(int)
+				// fmt.Println(currentInstruction)
+				return
+			}
 			if reg[a.(string)] > 0 {
 				currentInstruction = currentInstruction - 1
 				switch b.(type) {
@@ -159,7 +173,7 @@ func runProgram(id int, in, out, count chan int, itrs []instruction) {
 
 		x := itrs[currentInstruction]
 		// fmt.Println(currentInstruction, x, reg)
-		fmt.Println(id, "running", currentInstruction, x, reg, len(in))
+		// fmt.Println(id, "running", currentInstruction, x, reg, len(in))
 		funcMap[x.name](x.a, x.b)
 		currentInstruction++
 		if currentInstruction == len(itrs) {
